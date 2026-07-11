@@ -131,6 +131,20 @@ If you want to run it immediately, log in to the server with SSH and run `system
 
 This will not return until the backup is done, so it can possibly take a long time. Consider using [tmux](https://en.wikipedia.org/wiki/Tmux) if your SSH connection is unstable.
 
+### Executing commands in the container
+
+It is possible to run a command with the command below:
+
+```sh
+ansible-playbook -i inventory/hosts setup.yml --tags=command-restic -e command=COMMAND_HERE
+```
+
+For example, you can run `check` by running this command:
+
+```sh
+ansible-playbook -i inventory/hosts setup.yml --tags=command-restic -e command=check
+```
+
 ## Troubleshooting
 
 You can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu restic`.

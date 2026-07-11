@@ -18,6 +18,14 @@
     - name: Install restic
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
+- name: Perform restic command execution tasks
+  when: restic_enabled | bool
+  tags:
+    - command-restic
+  block:
+    - name: Run restic command
+      ansible.builtin.include_tasks: "{{ role_path }}/tasks/command.yml"
+
 - name: Perform restic uninstallation tasks
   when: not restic_enabled | bool
   tags:

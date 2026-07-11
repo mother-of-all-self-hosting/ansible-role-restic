@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+# SPDX-FileCopyrightText: 2023 Nikita Chernyi
+# SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2025, 2026 Suguru Hirahara
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+# The command to run the restic command: `ansible-playbook -i inventory/hosts setup.yml --tags=command-restic -e command=COMMAND_HERE`
+
+- name: Fail if playbook called incorrectly for restic command
+  ansible.builtin.fail:
+    msg: "The `command` variable needs to be provided via --extra-vars"
+  when: "command is not defined"
+
+- name: Run restic command
+  ansible.builtin.command:
+    cmd: |-
+      {{ devture_systemd_docker_base_host_command_docker }} run
+      --rm
+      --name {{ restic_identifier }}
+      --hostname={{ restic_container_hostname }}
+      --log-driver=none
+      --user=0:0
+      --cap-drop=ALL
+      --cap-add=SETUID
+      --cap-add=SETGID
+      --cap-add=CHOWN
+      --cap-add=FOWNER
+      --cap-add=DAC_OVERRIDE
+      --read-only
+      --network={{ restic_container_network }}
+      --env-file={{ restic_base_path }}/env
+      {% for volume in restic_container_additional_volumes %}
+      --mount type={{ volume.type | default('bind' if '/' in volume.src else 'volume') }},src={{ volume.src }},dst={{ volume.dst }}{{ (',' + volume.options) if volume.options | default('') else '' }}
+      {% endfor %}
+      --tmpfs=/root/.cache:rw,noexec,nosuid,size={{ restic_container_tmpfs_cache_size }}
+      --tmpfs=/tmp:rw,noexec,nosuid,size={{ restic_container_tmpfs_tmp_size }}
+      {% for arg in restic_container_extra_arguments %}
+      {{ arg }}
+      {% endfor %}
+      {{ restic_container_image }}
+      {{ command }}
+  register: restic_command_result
+  changed_when: restic_command_result.rc == 0
+  failed_when: false
+  no_log: true
+
+- name: Display restic command result
+  ansible.builtin.set_fact:
+    devture_playbook_runtime_messages_list: |
+      {{
+        devture_playbook_runtime_messages_list | default([])
+        +
+        [
+          restic_command_result.stdout
+        ]
+      }}
