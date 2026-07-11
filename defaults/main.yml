@@ -11,7 +11,7 @@
 
 restic_enabled: true
 
-restic_identifier: 'restic'
+restic_identifier: restic
 restic_base_path: "/{{ restic_identifier }}"
 restic_bin_path: "{{ restic_base_path }}/bin"
 restic_config_path: "{{ restic_base_path }}/config"
