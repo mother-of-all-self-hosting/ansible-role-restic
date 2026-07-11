@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-# Project source code URL: https://github.com/etkecc/restic
+# Project source code URL: https://github.com/restic/restic
 
 restic_enabled: true
 
@@ -17,9 +17,8 @@ restic_bin_path: "{{ restic_base_path }}/bin"
 restic_config_path: "{{ restic_base_path }}/config"
 restic_restore_path: "{{ restic_base_path }}/restored"
 
-# Image and Postgres version are determined automatically, based on the detected Postgres server version (if enabled), otherwise latest is used
-# Also see the `restic_postgresql_version_detection_*` variables.
-restic_version: "{{ (restic_postgres_version ~ '-' ~ restic_restic_version ~ '-' ~ restic_restic_version) if restic_postgres_version else 'latest' }}"
+# renovate: datasource=docker depName=restic/restic
+restic_version: 0.19.1
 restic_alpine_version: edge
 restic_restic_version: 1.4.4
 restic_restic_version: 2.1.4
@@ -28,14 +27,15 @@ restic_postgres_version: ""
 restic_uid: ""
 restic_gid: ""
 
-restic_container_image: "{{ restic_container_image_registry_prefix }}etkecc/restic:{{ restic_version }}"
-restic_container_image_registry_prefix: "{{ 'localhost/' if restic_container_image_self_build else restic_container_image_registry_prefix_upstream }}"
+restic_container_image: "{{ restic_container_image_registry_prefix }}restic/restic:{{ restic_container_image_tag }}"
+restic_container_image_tag: "{{ restic_version }}"
+restic_container_image_registry_prefix: "{{ restic_container_image_registry_prefix_upstream }}"
 restic_container_image_registry_prefix_upstream: "{{ restic_container_image_registry_prefix_upstream_default }}"
-restic_container_image_registry_prefix_upstream_default: "ghcr.io/"
+restic_container_image_registry_prefix_upstream_default: docker.io/
 
 restic_container_image_self_build: false
-restic_container_image_self_build_repo: "https://github.com/etkecc/restic"
-restic_container_image_self_build_repo_version: main
+restic_container_image_self_build_repo: "https://github.com/restic/restic.git"
+restic_container_image_self_build_repo_version: "{{ 'v' + restic_version if restic_version != 'latest' else 'master' }}"
 restic_container_image_self_build_src_files_path: "{{ restic_base_path }}/docker-src"
 
 # The base container network. It will be auto-created by this role if it doesn't exist already.

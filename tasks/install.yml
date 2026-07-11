@@ -136,7 +136,7 @@
     - name: Ensure restic container image is built
       community.docker.docker_image_build:
         name: "{{ restic_container_image }}"
-        dockerfile: Dockerfile
+        dockerfile: docker/Dockerfile
         path: "{{ restic_container_image_self_build_src_files_path }}"
         pull: true
         args:
