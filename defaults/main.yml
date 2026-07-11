@@ -11,7 +11,7 @@
 
 restic_enabled: true
 
-restic_identifier: 'backup-borg'
+restic_identifier: 'restic'
 restic_base_path: "/{{ restic_identifier }}"
 restic_bin_path: "{{ restic_base_path }}/bin"
 restic_config_path: "{{ restic_base_path }}/config"
@@ -96,7 +96,7 @@ restic_container_cleanup_command: |
   echo "Failed to remove stale container {{ restic_identifier }} after {{ restic_container_cleanup_timeout_seconds }} attempts" >&2;
   exit 1
 
-restic_username: 'backup-borg'
+restic_username: 'restic'
 
 # Specify systemd calendar configuration for the backup job
 # Note that the actual job may run with a delay (see `restic_schedule_randomized_delay_sec`)
@@ -125,7 +125,7 @@ restic_storage_compression: lz4
 restic_storage_ssh_command: ssh -o "StrictHostKeyChecking accept-new" -i /etc/restic.d/sshkey
 
 # Specify archive name format
-restic_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
+restic_storage_archive_name_format: restic-{now:%Y-%m-%d-%H%M%S}
 
 # Specify repository passphrase
 restic_storage_encryption_passphrase: ""

@@ -170,7 +170,7 @@
 
 - name: Ensure BorgBackup systemd service and timer are installed
   ansible.builtin.template:
-    src: "{{ role_path }}/templates/systemd/backup-borg.{{ item }}.j2"
+    src: "{{ role_path }}/templates/systemd/restic.{{ item }}.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ restic_identifier }}.{{ item }}"
     mode: "0644"
   with_items:

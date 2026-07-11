@@ -106,7 +106,7 @@ restic_ssh_key_private: |
 You can specify the backup archive name format. To set it, add the following configuration to your `vars.yml` file (adapt to your needs):
 
 ```yaml
-restic_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
+restic_storage_archive_name_format: restic-{now:%Y-%m-%d-%H%M%S}
 ```
 
 ### Configure retention policy (optional)
@@ -184,13 +184,13 @@ If you use the MDAD / MASH playbook, the shortcut commands with the [`just` prog
 
 ## Usage
 
-After installation, `backup-borg` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default).
+After installation, `restic` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default).
 
 ### Manually start the task
 
 Sometimes it can be helpful to run the backup as you'd like, avoiding to wait until 4 a.m., like when you test your configuration.
 
-If you want to run it immediately, log in to the server with SSH and run `systemctl start backup-borg` (or how you/your playbook named the service, e.g. `matrix-backup-borg`).
+If you want to run it immediately, log in to the server with SSH and run `systemctl start restic` (or how you/your playbook named the service, e.g. `matrix-restic`).
 
 This will not return until the backup is done, so it can possibly take a long time. Consider using [tmux](https://en.wikipedia.org/wiki/Tmux) if your SSH connection is unstable.
 
@@ -254,4 +254,4 @@ restic_systemd_required_services_list_auto: |
 
 ## Troubleshooting
 
-You can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu backup-borg`.
+You can find the logs in [systemd-journald](https://www.freedesktop.org/software/systemd/man/systemd-journald.service.html) by logging in to the server with SSH and running `journalctl -fu restic`.

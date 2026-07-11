@@ -9,9 +9,9 @@
   when: restic_enabled | bool
   tags:
     - setup-all
-    - setup-backup-borg
+    - setup-restic
     - install-all
-    - install-backup-borg
+    - install-restic
   block:
     - name: Validate BorgBackup configuration
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
@@ -22,7 +22,7 @@
   when: not restic_enabled | bool
   tags:
     - setup-all
-    - setup-backup-borg
+    - setup-restic
   block:
     - name: Uninstall BorgBackup
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
