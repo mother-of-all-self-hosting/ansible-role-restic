@@ -59,8 +59,8 @@ restic_container_additional_volumes_auto: []
 restic_container_additional_volumes_custom: []
 
 # Specify the size of the container's tmpfs volumes
-restic_container_tmpfs_tmp_size: 4096m
-restic_container_tmpfs_root_size: "{{ restic_container_tmpfs_tmp_size }}"
+restic_container_tmpfs_cache_size: 4096m
+restic_container_tmpfs_tmp_size: "{{ restic_container_tmpfs_cache_size }}"
 
 # A list of extra arguments to pass to the container (`docker create` command)
 restic_container_extra_arguments: "{{ restic_container_extra_arguments_auto + restic_container_extra_arguments_custom }}"
