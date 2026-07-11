@@ -29,7 +29,7 @@ ExecStartPre=-{{ devture_systemd_docker_base_host_command_docker }} run --rm --n
       --read-only \
       --network={{ restic_container_network }} \
       --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
-      --mount type=bind,src={{ restic_config_path }},dst=/etc/borgmatic.d,ro \
+      --mount type=bind,src={{ restic_config_path }},dst=/etc/restic.d,ro \
       {% for source in restic_location_source_directories %}
       --mount type=bind,src={{ source }},dst={{ source }},ro \
       {% endfor %}
@@ -38,14 +38,14 @@ ExecStartPre=-{{ devture_systemd_docker_base_host_command_docker }} run --rm --n
       {{ arg }} \
       {% endfor %}
       {{ restic_container_image }} \
-      sh -c "borgmatic rcreate --encryption {{ restic_encryption }}"
+      sh -c "restic rcreate --encryption {{ restic_encryption }}"
 
 # The `CAP_DAC_OVERRIDE` capability is required, so that `root` in the container
-# can read the `/etc/borgmatic.d/config.yaml` (`{{ restic_config_path }}/config.yaml`) file,
+# can read the `/etc/restic.d/config.yaml` (`{{ restic_config_path }}/config.yaml`) file,
 # owned by `restic_username:restic_username` on the filesystem.
 #
 # `/root` is mountes as temporary filesystem, because we're using `--read-only` and because
-# borgmatic tries to write to at least a few paths under `/root` (`.config`, `.ssh`, `.borgmatic`).
+# restic tries to write to at least a few paths under `/root` (`.config`, `.ssh`, `.restic`).
 ExecStart={{ devture_systemd_docker_base_host_command_docker }} run --rm --name {{ restic_identifier }} \
       --log-driver=none \
       --cap-drop=ALL \
@@ -53,7 +53,7 @@ ExecStart={{ devture_systemd_docker_base_host_command_docker }} run --rm --name 
       --read-only \
       --network={{ restic_container_network }} \
       --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
-      --mount type=bind,src={{ restic_config_path }},dst=/etc/borgmatic.d,ro \
+      --mount type=bind,src={{ restic_config_path }},dst=/etc/restic.d,ro \
       {% for source in restic_location_source_directories %}
       --mount type=bind,src={{ source }},dst={{ source }},ro \
       {% endfor %}

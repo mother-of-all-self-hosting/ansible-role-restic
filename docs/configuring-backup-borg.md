@@ -10,11 +10,11 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Setting up BorgBackup
 
-This is an [Ansible](https://www.ansible.com/) role which installs and configures [BorgBackup](https://www.borgbackup.org/) (short: Borg) with [borgmatic](https://torsion.org/borgmatic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
+This is an [Ansible](https://www.ansible.com/) role which installs and configures [BorgBackup](https://www.borgbackup.org/) (short: Borg) with [restic](https://torsion.org/restic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
 BorgBackup is a deduplicating backup program with optional compression and encryption. That means your daily incremental backups can be stored in a fraction of the space and is safe whether you store it at home or on a cloud service.
 
-See the borgmatic's [documentation](https://torsion.org/borgmatic/reference/configuration/) to learn what BorgBackup does and why it might be useful to you.
+See the restic's [documentation](https://torsion.org/restic/reference/configuration/) to learn what BorgBackup does and why it might be useful to you.
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ You will need a remote server where BorgBackup will store the backups. There are
 
 For some playbooks, if you're using the integrated Postgres database server, backups with BorgBackup will also include dumps of your Postgres database by default.
 
-Unless you disable the Postgres-backup support, make sure that the Postgres version of your homeserver's database is compatible with borgmatic. You can check the compatible versions on [`defaults/main.yml`](../defaults/main.yml).
+Unless you disable the Postgres-backup support, make sure that the Postgres version of your homeserver's database is compatible with restic. You can check the compatible versions on [`defaults/main.yml`](../defaults/main.yml).
 
 An alternative solution for backing up the Postgres database is [Postgres backup](https://github.com/mother-of-all-self-hosting/ansible-role-postgres-backup). If you decide to go with another solution, you can disable Postgres-backup support for BorgBackup using the `restic_postgresql_enabled` variable.
 
@@ -160,7 +160,7 @@ restic_ntfy_access_password: ""
 restic_ntfy_access_token: ""
 ```
 
-Refer to [this page](https://torsion.org/borgmatic/reference/configuration/monitoring/ntfy/) on the official documentation for details.
+Refer to [this page](https://torsion.org/restic/reference/configuration/monitoring/ntfy/) on the official documentation for details.
 
 If you are looking for an Ansible role for ntfy, you can check out [ansible-role-ntfy](https://github.com/mother-of-all-self-hosting/ansible-role-ntfy) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
 

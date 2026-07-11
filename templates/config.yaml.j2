@@ -8,8 +8,8 @@ repositories:
   - path: {{ repo }}
   {% endfor %}
 exclude_patterns: {{ restic_location_exclude_patterns|to_json }}
-# compatibility with borgmatic < 1.9.0 to avoid db backups location shifts
-user_runtime_directory: /root/.borgmatic
+# compatibility with restic < 1.9.0 to avoid db backups location shifts
+user_runtime_directory: /root/.restic
 {% if restic_location_remote_path|length > 0 %}
 remote_path: {{ restic_location_remote_path|to_json }}
 {% endif %}

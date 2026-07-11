@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-# Project source code URL: https://github.com/etkecc/borgmatic
+# Project source code URL: https://github.com/etkecc/restic
 
 restic_enabled: true
 
@@ -19,22 +19,22 @@ restic_restore_path: "{{ restic_base_path }}/restored"
 
 # Image and Postgres version are determined automatically, based on the detected Postgres server version (if enabled), otherwise latest is used
 # Also see the `restic_postgresql_version_detection_*` variables.
-restic_version: "{{ (restic_postgres_version ~ '-' ~ restic_borg_version ~ '-' ~ restic_borgmatic_version) if restic_postgres_version else 'latest' }}"
+restic_version: "{{ (restic_postgres_version ~ '-' ~ restic_borg_version ~ '-' ~ restic_restic_version) if restic_postgres_version else 'latest' }}"
 restic_alpine_version: edge
 restic_borg_version: 1.4.4
-restic_borgmatic_version: 2.1.4
+restic_restic_version: 2.1.4
 restic_postgres_version: ""
 
 restic_uid: ""
 restic_gid: ""
 
-restic_container_image: "{{ restic_container_image_registry_prefix }}etkecc/borgmatic:{{ restic_version }}"
+restic_container_image: "{{ restic_container_image_registry_prefix }}etkecc/restic:{{ restic_version }}"
 restic_container_image_registry_prefix: "{{ 'localhost/' if restic_container_image_self_build else restic_container_image_registry_prefix_upstream }}"
 restic_container_image_registry_prefix_upstream: "{{ restic_container_image_registry_prefix_upstream_default }}"
 restic_container_image_registry_prefix_upstream_default: "ghcr.io/"
 
 restic_container_image_self_build: false
-restic_container_image_self_build_repo: "https://github.com/etkecc/borgmatic"
+restic_container_image_self_build_repo: "https://github.com/etkecc/restic"
 restic_container_image_self_build_repo_version: main
 restic_container_image_self_build_src_files_path: "{{ restic_base_path }}/docker-src"
 
@@ -122,7 +122,7 @@ restic_location_remote_path: ""
 restic_storage_compression: lz4
 
 # Specify BorgBackup SSH command to run with SSH key
-restic_storage_ssh_command: ssh -o "StrictHostKeyChecking accept-new" -i /etc/borgmatic.d/sshkey
+restic_storage_ssh_command: ssh -o "StrictHostKeyChecking accept-new" -i /etc/restic.d/sshkey
 
 # Specify archive name format
 restic_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
@@ -278,8 +278,8 @@ restic_mysql_databases_port: 3306
 #                                                                      #
 ########################################################################
 
-# Setting a Healthchecks ping URL will make borgmatic ping your Healthchecks project when a backup begins, ends, or errors
-# See: https://torsion.org/borgmatic/reference/configuration/monitoring/healthchecks/
+# Setting a Healthchecks ping URL will make restic ping your Healthchecks project when a backup begins, ends, or errors
+# See: https://torsion.org/restic/reference/configuration/monitoring/healthchecks/
 restic_healthchecks_ping_url: ""
 
 # Specify possible states to ping
@@ -300,8 +300,8 @@ restic_healthchecks_states:
 #                                                                      #
 ########################################################################
 
-# Setting ntfy's topic and the address of your self-hosted ntfy instance will have borgmatic send push notifications when a backup task fails
-# See: https://torsion.org/borgmatic/reference/configuration/monitoring/ntfy/
+# Setting ntfy's topic and the address of your self-hosted ntfy instance will have restic send push notifications when a backup task fails
+# See: https://torsion.org/restic/reference/configuration/monitoring/ntfy/
 restic_ntfy_topic: ""
 restic_ntfy_server: ""
 
@@ -316,7 +316,7 @@ restic_ntfy_access_token: ""
 #                                                                      #
 ########################################################################
 
-# Default borgmatic configuration template which covers the generic use case.
+# Default restic configuration template which covers the generic use case.
 # You can customize it by controlling the various variables inside it.
 #
 # For a more advanced customization, you can extend the default (see `restic_configuration_extension_yaml`)
@@ -324,7 +324,7 @@ restic_ntfy_access_token: ""
 restic_configuration_yaml: "{{ lookup('template', 'templates/config.yaml.j2') }}"
 
 restic_configuration_extension_yaml: |
-  # Your custom YAML configuration for borgmatic goes here.
+  # Your custom YAML configuration for restic goes here.
   # This configuration extends the default starting configuration (`borg_configuration_yaml`).
   #
   # You can override individual variables from the default configuration, or introduce new ones.
@@ -334,7 +334,7 @@ restic_configuration_extension_yaml: |
 
 restic_configuration_extension: "{{ restic_configuration_extension_yaml | from_yaml if restic_configuration_extension_yaml | from_yaml is mapping else {} }}"
 
-# Holds the final borgmatic configuration (a combination of the default and its extension).
+# Holds the final restic configuration (a combination of the default and its extension).
 # You most likely don't need to touch this variable. Instead, see `restic_configuration_yaml`.
 restic_configuration: "{{ restic_configuration_yaml | from_yaml | combine(restic_configuration_extension, recursive=True) }}"
 

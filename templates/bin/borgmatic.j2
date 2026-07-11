@@ -13,7 +13,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
     --read-only \
     --network={{ restic_container_network }} \
     --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
-    --mount type=bind,src={{ restic_config_path }},dst=/etc/borgmatic.d,ro \
+    --mount type=bind,src={{ restic_config_path }},dst=/etc/restic.d,ro \
     --mount type=bind,src={{ restic_restore_path }},dst=/restore \
     {% for source in restic_location_source_directories %}
     --mount type=bind,src={{ source }},dst={{ source }},ro \
@@ -24,4 +24,4 @@ SPDX-License-Identifier: AGPL-3.0-or-later
     {{ arg }} \
     {% endfor %}
     {{ restic_container_image }} \
-    borgmatic "$@"
+    restic "$@"
