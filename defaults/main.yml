@@ -53,13 +53,13 @@ restic_container_extra_arguments: "{{ restic_container_extra_arguments_auto + re
 restic_container_extra_arguments_auto: []
 restic_container_extra_arguments_custom: []
 
-# List of systemd services that the BorgBackup systemd service depends on
+# List of systemd services that the restic systemd service depends on
 restic_systemd_required_services_list: "{{ restic_systemd_required_services_list_default + restic_systemd_required_services_list_auto + restic_systemd_required_services_list_custom }}"
 restic_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"
 restic_systemd_required_services_list_auto: []
 restic_systemd_required_services_list_custom: []
 
-# List of systemd services that the BorgBackup systemd service wants
+# List of systemd services that the restic systemd service wants
 restic_systemd_wanted_services_list: "{{ restic_systemd_wanted_services_list_default + restic_systemd_wanted_services_list_auto + restic_systemd_wanted_services_list_custom }}"
 restic_systemd_wanted_services_list_default: []
 restic_systemd_wanted_services_list_auto: []
@@ -121,7 +121,7 @@ restic_location_remote_path: ""
 # Specify compression algorithm
 restic_storage_compression: lz4
 
-# Specify BorgBackup SSH command to run with SSH key
+# Specify restic SSH command to run with SSH key
 restic_storage_ssh_command: ssh -o "StrictHostKeyChecking accept-new" -i /etc/restic.d/sshkey
 
 # Specify archive name format
@@ -140,11 +140,11 @@ restic_retention_keep_weekly: 4
 restic_retention_keep_monthly: 12
 restic_retention_keep_yearly: 2
 
-# Specify BorgBackup encryption mode
+# Specify restic encryption mode
 # Only "repokey-*" and "none" are supported
 restic_encryption: repokey-blake2
 
-# Specify private SSH key used to connect to the BorgBackup repo
+# Specify private SSH key used to connect to the restic repo
 restic_ssh_key_private: ""
 
 restic_supported_postgres_versions: ['12', '13', '14', '15', '16', '17', '18']
@@ -338,7 +338,7 @@ restic_configuration_extension: "{{ restic_configuration_extension_yaml | from_y
 # You most likely don't need to touch this variable. Instead, see `restic_configuration_yaml`.
 restic_configuration: "{{ restic_configuration_yaml | from_yaml | combine(restic_configuration_extension, recursive=True) }}"
 
-# restic_restart_necessary controls whether the BorgBackup systemd
+# restic_restart_necessary controls whether the restic systemd
 # service will be restarted (when true) or merely started (when false) by the
 # systemd service manager role (when conditional restart is enabled).
 #

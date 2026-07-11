@@ -36,14 +36,14 @@
 
     - name: Fail if detected Postgres version is unsupported
       ansible.builtin.fail:
-        msg: "You cannot use BorgBackup with Postgres v{{ postgres_detected_version_string }}. If you are using an old Postgres version, consider upgrading - link to docs for upgrading Postgres: docs/maintenance-postgres.md#upgrading-postgresql HOWEVER, if you are using a new Postgres version, there is a high chance that the version is not supported by BorgBackup yet (supported versions: {{ restic_supported_postgres_versions }}). You can't do anything with that, details: https://github.com/etkecc/restic/pull/1"
+        msg: "You cannot use restic with Postgres v{{ postgres_detected_version_string }}. If you are using an old Postgres version, consider upgrading - link to docs for upgrading Postgres: docs/maintenance-postgres.md#upgrading-postgresql HOWEVER, if you are using a new Postgres version, there is a high chance that the version is not supported by restic yet (supported versions: {{ restic_supported_postgres_versions }}). You can't do anything with that, details: https://github.com/etkecc/restic/pull/1"
       when: "postgres_detected_version_string not in restic_supported_postgres_versions"
 
-    - name: Set the correct BorgBackup version to use
+    - name: Set the correct restic version to use
       ansible.builtin.set_fact:
         restic_postgres_version: "{{ postgres_detected_version_string }}"
 
-- name: Ensure BorgBackup docker data paths exist
+- name: Ensure restic docker data paths exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -55,7 +55,7 @@
     - "{{ restic_config_path }}"
     - "{{ restic_restore_path }}"
 
-- name: Ensure BorgBackup build paths exist
+- name: Ensure restic build paths exist
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -81,7 +81,7 @@
     group: "{{ restic_gid }}"
   register: restic_restic_script_result
 
-- name: Ensure BorgBackup passwd is created
+- name: Ensure restic passwd is created
   ansible.builtin.template:
     src: "{{ role_path }}/templates/passwd.j2"
     dest: "{{ restic_config_path }}/passwd"
@@ -90,7 +90,7 @@
     group: "{{ restic_gid }}"
   register: restic_passwd_result
 
-- name: Ensure BorgBackup SSH key is created
+- name: Ensure restic SSH key is created
   ansible.builtin.template:
     src: "{{ role_path }}/templates/sshkey.j2"
     dest: "{{ restic_config_path }}/sshkey"
@@ -99,10 +99,10 @@
     group: "{{ restic_gid }}"
   register: restic_sshkey_result
 
-- name: Run if self-building of BorgBackup container image is not enabled
+- name: Run if self-building of restic container image is not enabled
   when: "not restic_container_image_self_build | bool"
   block:
-    - name: Ensure BorgBackup container image is pulled via community.docker.docker_image_pull
+    - name: Ensure restic container image is pulled via community.docker.docker_image_pull
       when: devture_systemd_docker_base_container_image_pull_method == 'ansible-module'
       community.docker.docker_image_pull:
         name: "{{ restic_container_image }}"
@@ -112,7 +112,7 @@
       delay: "{{ devture_playbook_help_container_retries_delay }}"
       until: restic_container_image_pull_result_ansible_module is not failed
 
-    - name: Ensure BorgBackup container image is pulled via ansible.builtin.command
+    - name: Ensure restic container image is pulled via ansible.builtin.command
       when: devture_systemd_docker_base_container_image_pull_method == 'command'
       ansible.builtin.command:
         cmd: "{{ devture_systemd_docker_base_host_command_docker }} pull {{ restic_container_image }}"
@@ -122,10 +122,10 @@
       until: restic_container_image_pull_result_command is not failed
       changed_when: "'Downloaded newer image' in restic_container_image_pull_result_command.stdout"
 
-- name: Run if self-building of BorgBackup container image is enabled
+- name: Run if self-building of restic container image is enabled
   when: "restic_container_image_self_build | bool"
   block:
-    - name: Ensure BorgBackup repository is present on self-build
+    - name: Ensure restic repository is present on self-build
       ansible.builtin.git:
         repo: "{{ restic_container_image_self_build_repo }}"
         version: "{{ restic_container_image_self_build_repo_version }}"
@@ -133,7 +133,7 @@
         force: "yes"
       register: restic_git_pull_results
 
-    - name: Ensure BorgBackup container image is built
+    - name: Ensure restic container image is built
       community.docker.docker_image_build:
         name: "{{ restic_container_image }}"
         dockerfile: Dockerfile
@@ -147,7 +147,7 @@
         rebuild: "{{ 'always' if restic_git_pull_results.changed | bool else 'never' }}"
       register: restic_container_image_build_result
 
-- name: Ensure BorgBackup container network is created via community.docker.docker_network
+- name: Ensure restic container network is created via community.docker.docker_network
   when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
   community.docker.docker_network:
     enable_ipv6: "{{ devture_systemd_docker_base_ipv6_enabled }}"
@@ -156,7 +156,7 @@
     driver_options: "{{ devture_systemd_docker_base_container_networks_driver_options }}"
   register: restic_network_creation_result
 
-- name: Ensure BorgBackup container network is created via ansible.builtin.command
+- name: Ensure restic container network is created via ansible.builtin.command
   when: devture_systemd_docker_base_container_network_creation_method == 'command'
   ansible.builtin.command:
     cmd: >-
@@ -168,7 +168,7 @@
   changed_when: restic_network_creation_result.rc == 0
   failed_when: restic_network_creation_result.rc != 0 and 'already exists' not in restic_network_creation_result.stderr
 
-- name: Ensure BorgBackup systemd service and timer are installed
+- name: Ensure restic systemd service and timer are installed
   ansible.builtin.template:
     src: "{{ role_path }}/templates/systemd/restic.{{ item }}.j2"
     dest: "{{ devture_systemd_docker_base_systemd_path }}/{{ restic_identifier }}.{{ item }}"
@@ -178,7 +178,7 @@
     - timer
   register: restic_systemd_services_result
 
-- name: Determine whether BorgBackup needs a restart
+- name: Determine whether restic needs a restart
   ansible.builtin.set_fact:
     restic_restart_necessary: >-
       {{

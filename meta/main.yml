@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: mash
-  description: BorgBackup role
+  description: restic role
   platforms:
     - name: Debian
       versions:

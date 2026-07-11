@@ -8,27 +8,27 @@ SPDX-FileCopyrightText: 2024-2026 Suguru Hirahara
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# Setting up BorgBackup
+# Setting up restic
 
-This is an [Ansible](https://www.ansible.com/) role which installs and configures [BorgBackup](https://www.borgbackup.org/) (short: Borg) with [restic](https://torsion.org/restic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
+This is an [Ansible](https://www.ansible.com/) role which installs and configures [restic](https://www.restic.org/) (short: Borg) with [restic](https://torsion.org/restic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
-BorgBackup is a deduplicating backup program with optional compression and encryption. That means your daily incremental backups can be stored in a fraction of the space and is safe whether you store it at home or on a cloud service.
+restic is a deduplicating backup program with optional compression and encryption. That means your daily incremental backups can be stored in a fraction of the space and is safe whether you store it at home or on a cloud service.
 
-See the restic's [documentation](https://torsion.org/restic/reference/configuration/) to learn what BorgBackup does and why it might be useful to you.
+See the restic's [documentation](https://torsion.org/restic/reference/configuration/) to learn what restic does and why it might be useful to you.
 
 ## Prerequisites
 
 ### Set up a remote server for storing backups
 
-You will need a remote server where BorgBackup will store the backups. There are hosted, BorgBackup compatible solutions available, such as [BorgBase](https://www.borgbase.com).
+You will need a remote server where restic will store the backups. There are hosted, restic compatible solutions available, such as [BorgBase](https://www.borgbase.com).
 
 ### Check the Postgres version
 
-For some playbooks, if you're using the integrated Postgres database server, backups with BorgBackup will also include dumps of your Postgres database by default.
+For some playbooks, if you're using the integrated Postgres database server, backups with restic will also include dumps of your Postgres database by default.
 
 Unless you disable the Postgres-backup support, make sure that the Postgres version of your homeserver's database is compatible with restic. You can check the compatible versions on [`defaults/main.yml`](../defaults/main.yml).
 
-An alternative solution for backing up the Postgres database is [Postgres backup](https://github.com/mother-of-all-self-hosting/ansible-role-postgres-backup). If you decide to go with another solution, you can disable Postgres-backup support for BorgBackup using the `restic_postgresql_enabled` variable.
+An alternative solution for backing up the Postgres database is [Postgres backup](https://github.com/mother-of-all-self-hosting/ansible-role-postgres-backup). If you decide to go with another solution, you can disable Postgres-backup support for restic using the `restic_postgresql_enabled` variable.
 
 ### Create a new SSH key
 
@@ -42,7 +42,7 @@ You don't need to place the key in the `.ssh` folder.
 
 ### Add the public key
 
-Next, add the **public** part of this SSH key (the `borg-backup.pub` file) to your BorgBackup provider/server.
+Next, add the **public** part of this SSH key (the `borg-backup.pub` file) to your restic provider/server.
 
 If you are using a hosted solution, follow their instructions. If you have your own server, copy the key to it with the command like below:
 
@@ -58,7 +58,7 @@ The **private** key needs to be added to `restic_ssh_key_private` on your `vars.
 
 ## Adjusting the playbook configuration
 
-To enable BorgBackup, add the following configuration to your `vars.yml` file (adapt to your needs).
+To enable restic, add the following configuration to your `vars.yml` file (adapt to your needs).
 
 **Note**: the path should be something like `inventory/host_vars/matrix.example.com/vars.yml` if you use the [matrix-docker-ansible-deploy (MDAD)](https://github.com/spantaleev/matrix-docker-ansible-deploy) or [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting/mash-playbook) Ansible playbook.
 
@@ -74,7 +74,7 @@ restic_enabled: true
 # Set the repository location, where:
 # - USER is a SSH user on a provider / server
 # - HOST is a SSH host of a provider / server
-# - REPO is a BorgBackup repository name
+# - REPO is a restic repository name
 restic_location_repositories:
  - ssh://USER@HOST/./REPO
 
@@ -99,7 +99,7 @@ restic_ssh_key_private: |
 ########################################################################
 ```
 
-**Note**: `REPO` will be initialized on backup start, for example: `matrix`. See [Remote repositories](https://borgbackup.readthedocs.io/en/stable/usage/general.html#repository-urls) for the syntax.
+**Note**: `REPO` will be initialized on backup start, for example: `matrix`. See [Remote repositories](https://restic.readthedocs.io/en/stable/usage/general.html#repository-urls) for the syntax.
 
 ### Set backup archive name (optional)
 
@@ -212,12 +212,12 @@ This will not return until the backup is done, so it can possibly take a long ti
 Example playbook configuration (`group_vars/servers` or other):
 
 >[!NOTE]
-> The configuration below wires the BorgBackup role with [this MASH/Postgres role](https://github.com/mother-of-all-self-hosting/ansible-role-postgres). Note that this is just an example. You can use this role without it Postgres integration or with another Postgres instance.
+> The configuration below wires the restic role with [this MASH/Postgres role](https://github.com/mother-of-all-self-hosting/ansible-role-postgres). Note that this is just an example. You can use this role without it Postgres integration or with another Postgres instance.
 
 ```yaml
 restic_enabled: false
 
-restic_identifier: my-borgbackup
+restic_identifier: my-restic
 
 restic_base_path: "{{ my_base_path }}/restic"
 

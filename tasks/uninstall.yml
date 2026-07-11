@@ -5,42 +5,42 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-- name: Check existence of BorgBackup systemd service
+- name: Check existence of restic systemd service
   ansible.builtin.stat:
     path: "{{ devture_systemd_docker_base_systemd_path }}/{{ restic_identifier }}.service"
   register: restic_service_stat
 
-- name: Uninstall BorgBackup systemd services and files
+- name: Uninstall restic systemd services and files
   when: restic_service_stat.stat.exists | bool
   block:
-    - name: Ensure BorgBackup systemd service is stopped
+    - name: Ensure restic systemd service is stopped
       ansible.builtin.service:
         name: "{{ restic_identifier }}"
         state: stopped
         enabled: false
         daemon_reload: true
 
-    - name: Ensure BorgBackup systemd service does not exist
+    - name: Ensure restic systemd service does not exist
       ansible.builtin.file:
         path: "{{ devture_systemd_docker_base_systemd_path }}/{{ restic_identifier }}.service"
         state: absent
 
-    - name: Ensure BorgBackup timer does not exist
+    - name: Ensure restic timer does not exist
       ansible.builtin.file:
         path: "{{ devture_systemd_docker_base_systemd_path }}/{{ restic_identifier }}.timer"
         state: absent
 
-    - name: Ensure BorgBackup container network does not exist
+    - name: Ensure restic container network does not exist
       when: restic_container_network_deletion_enabled
       block:
-        - name: Ensure BorgBackup container network does not exist via community.docker.docker_network
+        - name: Ensure restic container network does not exist via community.docker.docker_network
           when: devture_systemd_docker_base_container_network_creation_method == 'ansible-module'
           community.docker.docker_network:
             name: "{{ restic_container_network }}"
             state: absent
           register: restic_network_deletion_result
 
-        - name: Ensure BorgBackup container network does not exist via ansible.builtin.command
+        - name: Ensure restic container network does not exist via ansible.builtin.command
           when: devture_systemd_docker_base_container_network_creation_method == 'command'
           ansible.builtin.command:
             cmd: >-
@@ -49,7 +49,7 @@
           register: restic_network_deletion_result
           changed_when: restic_container_network in restic_network_deletion_result.stdout
 
-    - name: Ensure BorgBackup path does not exist
+    - name: Ensure restic path does not exist
       ansible.builtin.file:
         path: "{{ restic_base_path }}"
         state: absent

@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-- name: Perform BorgBackup installation tasks
+- name: Perform restic installation tasks
   when: restic_enabled | bool
   tags:
     - setup-all
@@ -13,16 +13,16 @@
     - install-all
     - install-restic
   block:
-    - name: Validate BorgBackup configuration
+    - name: Validate restic configuration
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/validate_config.yml"
-    - name: Install BorgBackup
+    - name: Install restic
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
-- name: Perform BorgBackup uninstallation tasks
+- name: Perform restic uninstallation tasks
   when: not restic_enabled | bool
   tags:
     - setup-all
     - setup-restic
   block:
-    - name: Uninstall BorgBackup
+    - name: Uninstall restic
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/uninstall.yml"
