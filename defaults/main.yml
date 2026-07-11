@@ -38,6 +38,11 @@ restic_container_image_self_build_repo: "https://github.com/restic/restic.git"
 restic_container_image_self_build_repo_version: "{{ 'v' + restic_version if restic_version != 'latest' else 'master' }}"
 restic_container_image_self_build_src_files_path: "{{ restic_base_path }}/docker-src"
 
+# The hostname to assign to the container (its `--hostname`).
+# Pinned to a stable value, because Docker otherwise randomizes it on each (re)creation
+# See: https://github.com/restic/restic/blob/master/docker/README.md
+restic_container_hostname: "{{ restic_identifier }}"
+
 # The base container network. It will be auto-created by this role if it doesn't exist already.
 restic_container_network: "{{ restic_identifier }}"
 
