@@ -101,6 +101,18 @@ restic_ssh_key_private: |
 
 **Note**: `REPO` will be initialized on backup start, for example: `matrix`. See [Remote repositories](https://restic.readthedocs.io/en/stable/usage/general.html#repository-urls) for the syntax.
 
+### Mount a directory to backup
+
+It is necessary to mount a data path for backing up data with the following configuration on your `vars.yml` file:
+
+```yaml
+restic_container_additional_volumes_auto:
+  - type: bind
+    src: PATH_TO_MOUNT_FOR_BACKUP
+    dst: /data
+    options: readonly
+```
+
 ### Set backup archive name (optional)
 
 You can specify the backup archive name format. To set it, add the following configuration to your `vars.yml` file (adapt to your needs):
