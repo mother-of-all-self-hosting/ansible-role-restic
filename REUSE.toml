@@ -27,7 +27,7 @@ SPDX-FileCopyrightText = [
 ]
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
-# See https://github.com/mother-of-all-self-hosting/ansible-role-backup_borg/issues/15
+# See https://github.com/mother-of-all-self-hosting/ansible-role-restic/issues/15
 [[annotations]]
 path = ["templates/sshkey.j2"]
 SPDX-FileCopyrightText = [

@@ -8,7 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # BorgBackup Ansible role
 
-[![REUSE status](https://api.reuse.software/badge/github.com/mother-of-all-self-hosting/ansible-role-backup_borg)](https://api.reuse.software/info/github.com/mother-of-all-self-hosting/ansible-role-backup_borg)
+[![REUSE status](https://api.reuse.software/badge/github.com/mother-of-all-self-hosting/ansible-role-restic)](https://api.reuse.software/info/github.com/mother-of-all-self-hosting/ansible-role-restic)
 
 This is an [Ansible](https://www.ansible.com/) role which installs and configures [BorgBackup](https://www.borgbackup.org/) (short: Borg) with [borgmatic](https://torsion.org/borgmatic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 

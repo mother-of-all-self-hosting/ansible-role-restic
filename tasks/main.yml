@@ -1,11 +1,12 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
 # SPDX-FileCopyrightText: 2023 Slavi Pantaleev
-
+# SPDX-FileCopyrightText: 2026 Suguru Hirahara
+#
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
 - name: Perform BorgBackup installation tasks
-  when: backup_borg_enabled | bool
+  when: restic_enabled | bool
   tags:
     - setup-all
     - setup-backup-borg
@@ -18,7 +19,7 @@
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/install.yml"
 
 - name: Perform BorgBackup uninstallation tasks
-  when: not backup_borg_enabled | bool
+  when: not restic_enabled | bool
   tags:
     - setup-all
     - setup-backup-borg

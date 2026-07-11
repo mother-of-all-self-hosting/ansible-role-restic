@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
 # SPDX-FileCopyrightText: 2023 Slavi Pantaleev
+# SPDX-FileCopyrightText: 2026 Suguru Hirahara
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -11,16 +12,16 @@
       Please change your configuration to rename the variable (`{{ item.old }}` -> `{{ item.new }}`).
   when: "lookup('ansible.builtin.varnames', ('^' + item.old + '$'), wantlist=True) | length > 0"
   with_items:
-    - { "old": "backup_borg_container_tmp_size", "new": "backup_borg_container_tmpfs_tmp_size" }
-    - { "old": "backup_borg_docker_image_name_prefix", "new": "backup_borg_container_image_registry_prefix" }
-    - { "old": "backup_borg_docker_image", "new": "backup_borg_container_image" }
-    - { "old": "backup_borg_docker_image_force_pull", "new": "backup_borg_container_image_force_pull" }
-    - { "old": "backup_borg_docker_image_registry_prefix", "new": "backup_borg_container_image_registry_prefix" }
-    - { "old": "backup_borg_docker_image_registry_prefix_upstream", "new": "backup_borg_container_image_registry_prefix_upstream" }
-    - { "old": "backup_borg_docker_image_registry_prefix_upstream_default", "new": "backup_borg_container_image_registry_prefix_upstream_default" }
-    - { "old": "backup_borg_container_repo", "new": "backup_borg_container_image_self_build_repo" }
-    - { "old": "backup_borg_container_src_files_path", "new": "backup_borg_container_image_self_build_src_files_path" }
-    - { "old": "backup_borg_container_image_force_pull", "new": "<removed> (the new community.docker.docker_image_pull module handles this natively)" }
+    - { "old": "restic_container_tmp_size", "new": "restic_container_tmpfs_tmp_size" }
+    - { "old": "restic_docker_image_name_prefix", "new": "restic_container_image_registry_prefix" }
+    - { "old": "restic_docker_image", "new": "restic_container_image" }
+    - { "old": "restic_docker_image_force_pull", "new": "restic_container_image_force_pull" }
+    - { "old": "restic_docker_image_registry_prefix", "new": "restic_container_image_registry_prefix" }
+    - { "old": "restic_docker_image_registry_prefix_upstream", "new": "restic_container_image_registry_prefix_upstream" }
+    - { "old": "restic_docker_image_registry_prefix_upstream_default", "new": "restic_container_image_registry_prefix_upstream_default" }
+    - { "old": "restic_container_repo", "new": "restic_container_image_self_build_repo" }
+    - { "old": "restic_container_src_files_path", "new": "restic_container_image_self_build_src_files_path" }
+    - { "old": "restic_container_image_force_pull", "new": "<removed> (the new community.docker.docker_image_pull module handles this natively)" }
 
 - name: Fail if required BorgBackup settings not defined
   ansible.builtin.fail:
@@ -28,20 +29,20 @@
       You need to define a required configuration setting (`{{ item.name }}`).
   when: "item.when | bool and lookup('vars', item.name, default='') | string | length == 0"
   with_items:
-    - { "name": "backup_borg_ssh_key_private", when: true }
-    - { "name": "backup_borg_location_repositories", when: true }
-    - { "name": "backup_borg_uid", when: true }
-    - { "name": "backup_borg_gid", when: true }
-    - { "name": "backup_borg_container_network", when: true }
-    - { "name": "backup_borg_postgresql_databases_hostname", when: "{{ backup_borg_postgresql_enabled }}" }
-    - { "name": "backup_borg_mariadb_databases_hostname", when: "{{ backup_borg_mariadb_enabled }}" }
-    - { "name": "backup_borg_mongodb_databases_hostname", when: "{{ backup_borg_mongodb_enabled }}" }
-    - { "name": "backup_borg_mysql_databases_hostname", when: "{{ backup_borg_mysql_enabled }}" }
-    - { "name": "backup_borg_ntfy_server", when: "{{ backup_borg_ntfy_topic != '' }}" }
-    - { "name": "backup_borg_ntfy_access_password", when: "{{ backup_borg_ntfy_access_username != '' }}" }
+    - { "name": "restic_ssh_key_private", when: true }
+    - { "name": "restic_location_repositories", when: true }
+    - { "name": "restic_uid", when: true }
+    - { "name": "restic_gid", when: true }
+    - { "name": "restic_container_network", when: true }
+    - { "name": "restic_postgresql_databases_hostname", when: "{{ restic_postgresql_enabled }}" }
+    - { "name": "restic_mariadb_databases_hostname", when: "{{ restic_mariadb_enabled }}" }
+    - { "name": "restic_mongodb_databases_hostname", when: "{{ restic_mongodb_enabled }}" }
+    - { "name": "restic_mysql_databases_hostname", when: "{{ restic_mysql_enabled }}" }
+    - { "name": "restic_ntfy_server", when: "{{ restic_ntfy_topic != '' }}" }
+    - { "name": "restic_ntfy_access_password", when: "{{ restic_ntfy_access_username != '' }}" }
 
 - name: Fail if encryption passphrase is undefined unless repository is unencrypted
   ansible.builtin.fail:
     msg: >-
-      You need to define a required passphrase using the `backup_borg_storage_encryption_passphrase` variable.
-  when: "backup_borg_storage_encryption_passphrase == '' and backup_borg_encryption != 'none'"
+      You need to define a required passphrase using the `restic_storage_encryption_passphrase` variable.
+  when: "restic_storage_encryption_passphrase == '' and restic_encryption != 'none'"

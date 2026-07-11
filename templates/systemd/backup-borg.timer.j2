@@ -1,5 +1,6 @@
 {#
 SPDX-FileCopyrightText: 2023 Julian-Samuel Gebühr
+SPDX-FileCopyrightText: 2026 Suguru Hirahara
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 #}
@@ -8,9 +9,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 Description=BorgBackup timer
 
 [Timer]
-Unit={{ backup_borg_identifier }}.service
-OnCalendar={{ backup_borg_schedule }}
-RandomizedDelaySec={{ backup_borg_schedule_randomized_delay_sec }}
+Unit={{ restic_identifier }}.service
+OnCalendar={{ restic_schedule }}
+RandomizedDelaySec={{ restic_schedule_randomized_delay_sec }}
 
 [Install]
 WantedBy=timers.target

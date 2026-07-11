@@ -28,7 +28,7 @@ For some playbooks, if you're using the integrated Postgres database server, bac
 
 Unless you disable the Postgres-backup support, make sure that the Postgres version of your homeserver's database is compatible with borgmatic. You can check the compatible versions on [`defaults/main.yml`](../defaults/main.yml).
 
-An alternative solution for backing up the Postgres database is [Postgres backup](https://github.com/mother-of-all-self-hosting/ansible-role-postgres-backup). If you decide to go with another solution, you can disable Postgres-backup support for BorgBackup using the `backup_borg_postgresql_enabled` variable.
+An alternative solution for backing up the Postgres database is [Postgres backup](https://github.com/mother-of-all-self-hosting/ansible-role-postgres-backup). If you decide to go with another solution, you can disable Postgres-backup support for BorgBackup using the `restic_postgresql_enabled` variable.
 
 ### Create a new SSH key
 
@@ -54,7 +54,7 @@ If you are using a hosted solution, follow their instructions. If you have your 
 cat PUBKEY | ssh USER@HOST 'dd of=.ssh/authorized_keys oflag=append conv=notrunc'
 ```
 
-The **private** key needs to be added to `backup_borg_ssh_key_private` on your `vars.yml` file as below.
+The **private** key needs to be added to `restic_ssh_key_private` on your `vars.yml` file as below.
 
 ## Adjusting the playbook configuration
 
@@ -65,25 +65,25 @@ To enable BorgBackup, add the following configuration to your `vars.yml` file (a
 ```yaml
 ########################################################################
 #                                                                      #
-# backup_borg                                                          #
+# restic                                                               #
 #                                                                      #
 ########################################################################
 
-backup_borg_enabled: true
+restic_enabled: true
 
 # Set the repository location, where:
 # - USER is a SSH user on a provider / server
 # - HOST is a SSH host of a provider / server
 # - REPO is a BorgBackup repository name
-backup_borg_location_repositories:
+restic_location_repositories:
  - ssh://USER@HOST/./REPO
 
 # Generate a strong password used for encrypting backups. You can create one with a command like `pwgen -s 64 1`.
-backup_borg_storage_encryption_passphrase: "PASSPHRASE"
+restic_storage_encryption_passphrase: "PASSPHRASE"
 
 # Add the content of the **private** part of the SSH key you have created.
 # Note: the whole key (all of its belonging lines) under the variable needs to be indented with 2 spaces.
-backup_borg_ssh_key_private: |
+restic_ssh_key_private: |
   -----BEGIN OPENSSH PRIVATE KEY-----
   TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZW
   xpdCwgc2VkIGRvIGVpdXNtb2QgdGVtcG9yIGluY2lkaWR1bnQgdXQgbGFib3JlIGV0IGRv
@@ -94,7 +94,7 @@ backup_borg_ssh_key_private: |
 
 ########################################################################
 #                                                                      #
-# /backup_borg                                                         #
+# /restic                                                              #
 #                                                                      #
 ########################################################################
 ```
@@ -106,7 +106,7 @@ backup_borg_ssh_key_private: |
 You can specify the backup archive name format. To set it, add the following configuration to your `vars.yml` file (adapt to your needs):
 
 ```yaml
-backup_borg_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
+restic_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
 ```
 
 ### Configure retention policy (optional)
@@ -114,33 +114,33 @@ backup_borg_storage_archive_name_format: backup-borg-{now:%Y-%m-%d-%H%M%S}
 It is also possible to configure a retention strategy. To configure it, add the following configuration to your `vars.yml` file (adapt to your needs):
 
 ```yaml
-backup_borg_retention_keep_hourly: 0
-backup_borg_retention_keep_daily: 7
-backup_borg_retention_keep_weekly: 4
-backup_borg_retention_keep_monthly: 12
-backup_borg_retention_keep_yearly: 2
+restic_retention_keep_hourly: 0
+restic_retention_keep_daily: 7
+restic_retention_keep_weekly: 4
+restic_retention_keep_monthly: 12
+restic_retention_keep_yearly: 2
 ```
 
 ### Edit the schedule (optional)
 
-By default the task will run 4 a.m. every day based on the `backup_borg_schedule` variable. It is defined in the format of systemd timer calendar.
+By default the task will run 4 a.m. every day based on the `restic_schedule` variable. It is defined in the format of systemd timer calendar.
 
 To edit the schedule, add the following configuration to your `vars.yml` file (adapt to your needs):
 
 ```yaml
-backup_borg_schedule: "*-*-* 04:00:00"
+restic_schedule: "*-*-* 04:00:00"
 ```
 
-**Note**: the actual job may run with a delay. See `backup_borg_schedule_randomized_delay_sec` on [`defaults/main.yml`](https://github.com/mother-of-all-self-hosting/ansible-role-backup_borg/blob/f5d5b473d48c6504be10b3d946255ef5c186c2a6/defaults/main.yml#L50) for its default value.
+**Note**: the actual job may run with a delay. See `restic_schedule_randomized_delay_sec` on [`defaults/main.yml`](https://github.com/mother-of-all-self-hosting/ansible-role-restic/blob/f5d5b473d48c6504be10b3d946255ef5c186c2a6/defaults/main.yml#L50) for its default value.
 
 ### Set include and/or exclude directories (optional)
 
-`backup_borg_location_source_directories` defines the list of directories to back up.
+`restic_location_source_directories` defines the list of directories to back up.
 
-You might also want to exclude certain directories or file patterns from the backup using the `backup_borg_location_exclude_patterns` variable.
+You might also want to exclude certain directories or file patterns from the backup using the `restic_location_exclude_patterns` variable.
 
 >[!NOTE]
-> If you use multiple playbooks which utliize this role, you should make sure by yourself that the all of the directories to be backed up which those playbooks manage are correctly specified to `backup_borg_location_source_directories`.
+> If you use multiple playbooks which utliize this role, you should make sure by yourself that the all of the directories to be backed up which those playbooks manage are correctly specified to `restic_location_source_directories`.
 >
 > For example, backing up data directories of the [matrix-docker-ansible-deploy Ansible playbook](https://github.com/spantaleev/matrix-docker-ansible-deploy) and the [Mother-of-All-Self-Hosting Ansible playbook](https://github.com/mother-of-all-self-hosting/mash-playbook) requires both `matrix_base_data_path` and `mash_playbook_base_path` to be specified. Refer to the configuration files of the playbooks for details.
 
@@ -149,15 +149,15 @@ You might also want to exclude certain directories or file patterns from the bac
 You can also have the service send push notifications to your self-hosted [ntfy](https://ntfy.sh/) instance. To enable it, it is necessary to specify the topic to send them, the server's hostname, and login credentials (username and password, or access token) by adding the following configuration to your `vars.yml` file (adapt to your needs):
 
 ```yaml
-backup_borg_ntfy_topic: YOUR_NTFY_TOPIC_HERE
-backup_borg_ntfy_server: YOUR_NTFY_INSTANCE_HOSTNAME_HERE
+restic_ntfy_topic: YOUR_NTFY_TOPIC_HERE
+restic_ntfy_server: YOUR_NTFY_INSTANCE_HOSTNAME_HERE
 
 # Specify username and password
-backup_borg_ntfy_access_username: ""
-backup_borg_ntfy_access_password: ""
+restic_ntfy_access_username: ""
+restic_ntfy_access_password: ""
 
 # Otherwise, specify the access token
-backup_borg_ntfy_access_token: ""
+restic_ntfy_access_token: ""
 ```
 
 Refer to [this page](https://torsion.org/borgmatic/reference/configuration/monitoring/ntfy/) on the official documentation for details.
@@ -170,7 +170,7 @@ There are some additional things you may wish to configure about the service.
 
 Take a look at:
 
-- [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `backup_borg_configuration_extension_yaml` variable
+- [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file. You can override settings (even those that don't have dedicated playbook variables) using the `restic_configuration_extension_yaml` variable
 
 ## Installing
 
@@ -184,7 +184,7 @@ If you use the MDAD / MASH playbook, the shortcut commands with the [`just` prog
 
 ## Usage
 
-After installation, `backup-borg` will run automatically every day at `04:00:00` (as defined in `backup_borg_schedule` by default).
+After installation, `backup-borg` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default).
 
 ### Manually start the task
 
@@ -204,7 +204,7 @@ This will not return until the backup is done, so it can possibly take a long ti
     # This role is not required. We just use it in our example.
     - role: galaxy/postgres
 
-    - role: galaxy/ansible.role.backup_borg
+    - role: galaxy/ansible.role.restic
 
     - role: another_role
 ```
@@ -215,38 +215,38 @@ Example playbook configuration (`group_vars/servers` or other):
 > The configuration below wires the BorgBackup role with [this MASH/Postgres role](https://github.com/mother-of-all-self-hosting/ansible-role-postgres). Note that this is just an example. You can use this role without it Postgres integration or with another Postgres instance.
 
 ```yaml
-backup_borg_enabled: false
+restic_enabled: false
 
-backup_borg_identifier: my-borgbackup
+restic_identifier: my-borgbackup
 
-backup_borg_base_path: "{{ my_base_path }}/backup_borg"
+restic_base_path: "{{ my_base_path }}/restic"
 
-backup_borg_username: "{{ my_username }}"
-backup_borg_uid: "{{ my_uid }}"
-backup_borg_gid: "{{ my_gid }}"
+restic_username: "{{ my_username }}"
+restic_uid: "{{ my_uid }}"
+restic_gid: "{{ my_gid }}"
 
 # We assume Postgres is installed via the `com.devture.ansible.role.postgres` role.
 # Remove this and any `postgres_*` reference below, if that's not the case.
-backup_borg_postgresql_version_detection_postgres_role_name: galaxy/com.devture.ansible.role.postgres
+restic_postgresql_version_detection_postgres_role_name: galaxy/com.devture.ansible.role.postgres
 
 # If you will use this without `com.devture.ansible.role.postgres`, you'll need to set the major Postgres version manually instead.
-# backup_borg_postgres_version: 15
+# restic_postgres_version: 15
 
-backup_borg_container_network: "{{ postgres_container_network if postgres_enabled else backup_borg_identifier }}"
+restic_container_network: "{{ postgres_container_network if postgres_enabled else restic_identifier }}"
 
-backup_borg_container_image_self_build: "{{ architecture not in ['amd64', 'arm32', 'arm64'] }}"
+restic_container_image_self_build: "{{ architecture not in ['amd64', 'arm32', 'arm64'] }}"
 
-backup_borg_postgresql_enabled: "{{ postgres_enabled }}"
-backup_borg_postgresql_databases_hostname: "{{ postgres_connection_hostname if postgres_enabled else '' }}"
-backup_borg_postgresql_databases_username: "{{ postgres_connection_username if postgres_enabled else '' }}"
-backup_borg_postgresql_databases_password: "{{ postgres_connection_password if postgres_enabled else '' }}"
-backup_borg_postgresql_databases_port: "{{ postgres_connection_port if postgres_enabled else 5432 }}"
-backup_borg_postgresql_databases: "{{ postgres_managed_databases | map(attribute='name') if postgres_enabled else [] }}"
+restic_postgresql_enabled: "{{ postgres_enabled }}"
+restic_postgresql_databases_hostname: "{{ postgres_connection_hostname if postgres_enabled else '' }}"
+restic_postgresql_databases_username: "{{ postgres_connection_username if postgres_enabled else '' }}"
+restic_postgresql_databases_password: "{{ postgres_connection_password if postgres_enabled else '' }}"
+restic_postgresql_databases_port: "{{ postgres_connection_port if postgres_enabled else 5432 }}"
+restic_postgresql_databases: "{{ postgres_managed_databases | map(attribute='name') if postgres_enabled else [] }}"
 
-backup_borg_location_source_directories:
+restic_location_source_directories:
   - "{{ my_data_path }}"
 
-backup_borg_systemd_required_services_list_auto: |
+restic_systemd_required_services_list_auto: |
   {{
     ([postgres_identifier ~ '.service'] if postgres_enabled else [])
   }}
