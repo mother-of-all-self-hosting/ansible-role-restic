@@ -30,6 +30,11 @@ ExecStart=-{{ devture_systemd_docker_base_host_command_docker }} run \
       --log-driver=none \
       --user={{ backup_borg_uid }}:{{ backup_borg_gid }} \
       --cap-drop=ALL \
+      --cap-add=SETUID \
+      --cap-add=SETGID \
+      --cap-add=CHOWN \
+      --cap-add=FOWNER \
+      --cap-add=DAC_OVERRIDE \
       --read-only \
       --network={{ restic_container_network }} \
       --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
