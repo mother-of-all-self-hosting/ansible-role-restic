@@ -37,11 +37,6 @@ ExecStart=-{{ devture_systemd_docker_base_host_command_docker }} run \
       --cap-add=DAC_OVERRIDE \
       --read-only \
       --network={{ restic_container_network }} \
-      --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
-      --mount type=bind,src={{ restic_config_path }},dst=/etc/restic.d,ro \
-      {% for source in restic_location_source_directories %}
-      --mount type=bind,src={{ source }},dst={{ source }},ro \
-      {% endfor %}
       {% for volume in restic_container_additional_volumes %}
       --mount type={{ volume.type | default('bind' if '/' in volume.src else 'volume') }},src={{ volume.src }},dst={{ volume.dst }}{{ (',' + volume.options) if volume.options | default('') else '' }} \
       {% endfor %}
@@ -52,30 +47,6 @@ ExecStart=-{{ devture_systemd_docker_base_host_command_docker }} run \
       {% endfor %}
       {{ restic_container_image }} \
       {{ restic_process_extra_arguments | join(' ') }}
-
-# The `CAP_DAC_OVERRIDE` capability is required, so that `root` in the container
-# can read the `/etc/restic.d/config.yaml` (`{{ restic_config_path }}/config.yaml`) file,
-# owned by `restic_username:restic_username` on the filesystem.
-#
-# `/root` is mountes as temporary filesystem, because we're using `--read-only` and because
-# restic tries to write to at least a few paths under `/root` (`.config`, `.ssh`, `.restic`).
-ExecStart={{ devture_systemd_docker_base_host_command_docker }} run --rm --name {{ restic_identifier }} \
-      --log-driver=none \
-      --cap-drop=ALL \
-      --cap-add=CAP_DAC_OVERRIDE \
-      --read-only \
-      --network={{ restic_container_network }} \
-      --mount type=bind,src={{ restic_config_path }}/passwd,dst=/etc/passwd,ro \
-      --mount type=bind,src={{ restic_config_path }},dst=/etc/restic.d,ro \
-      {% for source in restic_location_source_directories %}
-      --mount type=bind,src={{ source }},dst={{ source }},ro \
-      {% endfor %}
-      --tmpfs=/root:rw,noexec,nosuid,size={{ restic_container_tmpfs_root_size }} \
-      --tmpfs=/tmp:rw,noexec,nosuid,size={{ restic_container_tmpfs_tmp_size }} \
-      {% for arg in restic_container_extra_arguments %}
-      {{ arg }} \
-      {% endfor %}
-      {{ restic_container_image }}
 
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ restic_identifier }} 2>/dev/null || true'
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ restic_identifier }} 2>/dev/null || true'

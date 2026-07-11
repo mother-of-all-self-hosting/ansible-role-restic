@@ -16,21 +16,3 @@ path = [
 ]
 SPDX-FileCopyrightText = "NONE"
 SPDX-License-Identifier = "CC0-1.0"
-
-# Apparently not parsed correctly for some reason …
-[[annotations]]
-path = ["templates/config.yaml.j2"]
-SPDX-FileCopyrightText = [
-  "2023 Julian-Samuel Gebühr",
-  "2023 - 2024 Nikita Chernyi",
-  "2026 Suguru Hirahara"
-]
-SPDX-License-Identifier = "AGPL-3.0-or-later"
-
-# See https://github.com/mother-of-all-self-hosting/ansible-role-restic/issues/15
-[[annotations]]
-path = ["templates/sshkey.j2"]
-SPDX-FileCopyrightText = [
-  "2023 Julian-Samuel Gebühr"
-]
-SPDX-License-Identifier = "AGPL-3.0-or-later"
