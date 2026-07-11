@@ -141,8 +141,8 @@
         pull: true
         args:
           POSTGRES_VERSION: "{{ restic_postgres_version }}"
-          BORG_VERSION: "{{ restic_borg_version }}"
-          BORGMATIC_VERSION: "{{ restic_restic_version }}"
+          restic_VERSION: "{{ restic_restic_version }}"
+          resticMATIC_VERSION: "{{ restic_restic_version }}"
           ALPINE_VERSION: "{{ restic_alpine_version }}"
         rebuild: "{{ 'always' if restic_git_pull_results.changed | bool else 'never' }}"
       register: restic_container_image_build_result

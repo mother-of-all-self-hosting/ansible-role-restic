@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Setting up restic
 
-This is an [Ansible](https://www.ansible.com/) role which installs and configures [restic](https://www.restic.org/) (short: Borg) with [restic](https://torsion.org/restic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
+This is an [Ansible](https://www.ansible.com/) role which installs and configures [restic](https://www.restic.org/) (short: restic) with [restic](https://torsion.org/restic/) in a [Docker](https://www.docker.com/) container wrapped in a systemd service.
 
 restic is a deduplicating backup program with optional compression and encryption. That means your daily incremental backups can be stored in a fraction of the space and is safe whether you store it at home or on a cloud service.
 
@@ -20,7 +20,7 @@ See the restic's [documentation](https://torsion.org/restic/reference/configurat
 
 ### Set up a remote server for storing backups
 
-You will need a remote server where restic will store the backups. There are hosted, restic compatible solutions available, such as [BorgBase](https://www.borgbase.com).
+You will need a remote server where restic will store the backups. There are hosted, restic compatible solutions available, such as [resticBase](https://www.resticbase.com).
 
 ### Check the Postgres version
 
@@ -35,14 +35,14 @@ An alternative solution for backing up the Postgres database is [Postgres backup
 Run the command below on any machine to create a new SSH key:
 
 ```bash
-ssh-keygen -t ed25519 -N '' -f borg-backup -C borg-backup
+ssh-keygen -t ed25519 -N '' -f restic-backup -C restic-backup
 ```
 
 You don't need to place the key in the `.ssh` folder.
 
 ### Add the public key
 
-Next, add the **public** part of this SSH key (the `borg-backup.pub` file) to your restic provider/server.
+Next, add the **public** part of this SSH key (the `restic-backup.pub` file) to your restic provider/server.
 
 If you are using a hosted solution, follow their instructions. If you have your own server, copy the key to it with the command like below:
 

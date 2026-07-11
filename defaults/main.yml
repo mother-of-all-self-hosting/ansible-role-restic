@@ -19,9 +19,9 @@ restic_restore_path: "{{ restic_base_path }}/restored"
 
 # Image and Postgres version are determined automatically, based on the detected Postgres server version (if enabled), otherwise latest is used
 # Also see the `restic_postgresql_version_detection_*` variables.
-restic_version: "{{ (restic_postgres_version ~ '-' ~ restic_borg_version ~ '-' ~ restic_restic_version) if restic_postgres_version else 'latest' }}"
+restic_version: "{{ (restic_postgres_version ~ '-' ~ restic_restic_version ~ '-' ~ restic_restic_version) if restic_postgres_version else 'latest' }}"
 restic_alpine_version: edge
-restic_borg_version: 1.4.4
+restic_restic_version: 1.4.4
 restic_restic_version: 2.1.4
 restic_postgres_version: ""
 
@@ -325,7 +325,7 @@ restic_configuration_yaml: "{{ lookup('template', 'templates/config.yaml.j2') }}
 
 restic_configuration_extension_yaml: |
   # Your custom YAML configuration for restic goes here.
-  # This configuration extends the default starting configuration (`borg_configuration_yaml`).
+  # This configuration extends the default starting configuration (`restic_configuration_yaml`).
   #
   # You can override individual variables from the default configuration, or introduce new ones.
   #
