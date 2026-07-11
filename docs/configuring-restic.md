@@ -196,7 +196,7 @@ If you use the MDAD / MASH playbook, the shortcut commands with the [`just` prog
 
 ## Usage
 
-After installation, `restic` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default).
+After installation, `restic` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default) to back up the directory mounted at `/data`.
 
 ### Manually start the task
 

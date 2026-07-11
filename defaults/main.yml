@@ -67,6 +67,13 @@ restic_container_extra_arguments: "{{ restic_container_extra_arguments_auto + re
 restic_container_extra_arguments_auto: []
 restic_container_extra_arguments_custom: []
 
+# A list of extra arguments to pass to the restic process
+# Example: ['--SOME_ARGUMENT']
+restic_process_extra_arguments: "{{ restic_process_extra_arguments_auto + restic_process_extra_arguments_custom }}"
+restic_process_extra_arguments_auto:
+  - "backup /data"
+restic_process_extra_arguments_custom: []
+
 # List of systemd services that the restic systemd service depends on
 restic_systemd_required_services_list: "{{ restic_systemd_required_services_list_default + restic_systemd_required_services_list_auto + restic_systemd_required_services_list_custom }}"
 restic_systemd_required_services_list_default: "{{ [devture_systemd_docker_base_docker_service_name] if devture_systemd_docker_base_docker_service_name else [] }}"

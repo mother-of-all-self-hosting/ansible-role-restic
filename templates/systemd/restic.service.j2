@@ -42,7 +42,7 @@ ExecStartPre=-{{ devture_systemd_docker_base_host_command_docker }} run --rm --n
       {{ arg }} \
       {% endfor %}
       {{ restic_container_image }} \
-      sh -c "restic rcreate --encryption {{ restic_encryption }}"
+      {{ restic_process_extra_arguments | join(' ') }}
 
 # The `CAP_DAC_OVERRIDE` capability is required, so that `root` in the container
 # can read the `/etc/restic.d/config.yaml` (`{{ restic_config_path }}/config.yaml`) file,
