@@ -1,7 +1,10 @@
 ---
 galaxy_info:
-  author: mash
-  description: restic role
+  author: Suguru Hirahara
+  company: progressiv
+  role_name: restic
+  namespace: progressiv
+  description: restic
   platforms:
     - name: Debian
       versions:
