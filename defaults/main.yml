@@ -120,6 +120,21 @@ restic_schedule_randomized_delay_sec: 2h
 # Specify the timezone
 restic_environment_variables_tz: UTC
 
+# Specify the repository location
+restic_environment_variables_restic_repository: ""
+
+# Specify the actual password for the repository
+restic_environment_variables_restic_password: ""
+
+# Specify the pack size in MiB
+restic_environment_variables_restic_pack_size: ""
+
+# Specify Rest Server username
+restic_environment_variables_rest_username: ""
+
+# Specify Rest Server password
+restic_environment_variables_rest_password: ""
+
 # Additional environment variables.
 restic_environment_variables_additional_variables: ""
 
