@@ -117,6 +117,12 @@ restic_schedule: "*-*-* 04:00:00"
 # Specify the delay with which the systemd timer may run in relation to the `restic_schedule` schedule
 restic_schedule_randomized_delay_sec: 2h
 
+# Specify the timezone
+restic_environment_variables_tz: UTC
+
+# Additional environment variables.
+restic_environment_variables_additional_variables: ""
+
 # restic_restart_necessary controls whether the restic systemd
 # service will be restarted (when true) or merely started (when false) by the
 # systemd service manager role (when conditional restart is enabled).

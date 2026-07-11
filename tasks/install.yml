@@ -7,7 +7,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 ---
-- name: Ensure restic docker data paths exist
+- name: Ensure restic path exists
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
@@ -15,6 +15,18 @@
     owner: "{{ restic_uid }}"
     group: "{{ restic_gid }}"
   with_items:
+    - "{{ restic_base_path }}"
+
+- name: Ensure restic support files installed
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/{{ item }}.j2"
+    dest: "{{ restic_base_path }}/{{ item }}"
+    mode: "0640"
+    owner: "{{ restic_uid }}"
+    group: "{{ restic_gid }}"
+  with_items:
+    - env
+  register: restic_support_files_result
 
 - name: Run if self-building of restic container image is not enabled
   when: "not restic_container_image_self_build | bool"
@@ -94,6 +106,7 @@
   ansible.builtin.set_fact:
     restic_restart_necessary: >-
       {{
+        restic_support_files_result.changed | default(false)
         or restic_systemd_services_result.changed | default(false)
         or restic_container_image_pull_result_ansible_module.changed | default(false)
         or restic_container_image_pull_result_command.changed | default(false)
