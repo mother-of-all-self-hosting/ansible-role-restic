@@ -123,6 +123,9 @@ If you use the MASH playbook, the shortcut commands with the [`just` program](ht
 
 After installation, `restic backup /data` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default) to back up the directory mounted at `/data`.
 
+>[!NOTE]
+> See [this section](https://restic.readthedocs.io/en/latest/040_backup.html#reading-data-from-a-command) on the documentation for details about setting up a task to create a back up of the output of a program, such as `mysqldump`.
+
 ### Manually start the task
 
 Sometimes it can be helpful to run the backup as you'd like, avoiding to wait until 4 a.m., like when you test your configuration.
