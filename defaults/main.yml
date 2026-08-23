@@ -14,7 +14,7 @@ restic_enabled: true
 restic_identifier: restic
 restic_base_path: "/{{ restic_identifier }}"
 
-# renovate: datasource=docker depName=restic/restic
+# renovate: datasource=docker depName=restic/restic versioning=semver
 restic_version: 0.19.1
 
 restic_uid: ""
