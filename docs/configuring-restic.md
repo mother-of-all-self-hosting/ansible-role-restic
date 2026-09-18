@@ -107,7 +107,7 @@ Take a look at:
 
 - [`defaults/main.yml`](../defaults/main.yml) for some variables that you can customize via your `vars.yml` file
 
-See the [documentation](https://restic.readthedocs.io/en/stable/075_scripting.html#environment-variables) for a complete list of restic's config options that you could put in `restic_environment_variables_additional_variables`.
+See the [documentation](https://restic.readthedocs.io/en/stable/075_scripting.html#environment-variables) for a complete list of restic's config options that you can put in `restic_environment_variables_additional_variables`.
 
 ## Installing
 
