@@ -60,7 +60,7 @@ restic_container_extra_arguments: "{{ restic_container_extra_arguments_auto + re
 restic_container_extra_arguments_auto: []
 restic_container_extra_arguments_custom: []
 
-# A list of extra arguments to pass to the restic process
+# A list of extra arguments to pass to the process inside the container
 # Example: ['--SOME_ARGUMENT']
 restic_process_extra_arguments: "{{ restic_process_extra_arguments_auto + restic_process_extra_arguments_custom }}"
 restic_process_extra_arguments_auto:

@@ -47,7 +47,9 @@ ExecStart=-{{ devture_systemd_docker_base_host_command_docker }} run \
       {{ arg }} \
       {% endfor %}
       {{ restic_container_image }} \
-      {{ restic_process_extra_arguments | join(' ') }}
+      {% for arg in restic_process_extra_arguments %}
+      {{ arg }} \
+      {% endfor %}
 
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} stop -t {{ devture_systemd_docker_base_container_stop_grace_time_seconds }} {{ restic_identifier }} 2>/dev/null || true'
 ExecStop=-{{ devture_systemd_docker_base_host_command_sh }} -c '{{ devture_systemd_docker_base_host_command_docker }} rm {{ restic_identifier }} 2>/dev/null || true'
