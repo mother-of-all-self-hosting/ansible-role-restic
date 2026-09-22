@@ -20,7 +20,7 @@ See the restic's [documentation](https://restic.readthedocs.io/en/stable/) to le
 
 ### Set up a repository for storing backups
 
-To use restic, it is necessary to prepare a "repository" where restic will store the backups. You can use a SFTP server, Amazon S3-compatible storage, other proprietry object storages, etc. See [this page](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) on the official documentation for details.
+To use restic, it is necessary to prepare a "repository" where restic will store the backups. You can use a SFTP server, Amazon S3-compatible storage, other proprietry object storages, etc. Refer to [this page](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html) on the official documentation for details.
 
 When creating one, you are required to set a password (also called a key). Please take a note of it along with the repository's location, as it is necessary to provide both of them with `restic_environment_variables_restic_password` and `restic_environment_variables_restic_repository` variables, respectively.
 
@@ -124,7 +124,7 @@ If you use the MASH playbook, the shortcut commands with the [`just` program](ht
 After installation, `restic backup /data` will run automatically every day at `04:00:00` (as defined in `restic_schedule` by default) to back up the directory mounted at `/data`.
 
 >[!NOTE]
-> See [this section](https://restic.readthedocs.io/en/latest/040_backup.html#reading-data-from-a-command) on the documentation for details about setting up a task to create a back up of the output of a program, such as `mysqldump`.
+> Refer to [this section](https://restic.readthedocs.io/en/latest/040_backup.html#reading-data-from-a-command) on the documentation for details about setting up a task to create a back up of the output of a program, such as `mysqldump`.
 
 ### Manually start the task
 
