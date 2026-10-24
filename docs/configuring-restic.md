@@ -24,7 +24,7 @@ To use restic, it is necessary to prepare a "repository" where restic will store
 
 When creating one, you are required to set a password (also called a key). Please take a note of it along with the repository's location, as it is necessary to provide both of them with `restic_environment_variables_restic_password` and `restic_environment_variables_restic_repository` variables, respectively.
 
-If you are looking for an Ansible role for Rest Server, you can check out [ansible-role-restserver](https://radicle.network/nodes/iris.radicle.network/rad%3Azi4z5FpzySQ1kRqVpqcTkEfnXrD9) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
+If you are looking for an Ansible role for Rest Server, you can check out [ansible-role-restserver](https://radicle.network/nodes/progressiv.radicle.garden/rad%3Azi4z5FpzySQ1kRqVpqcTkEfnXrD9) maintained by the [Mother-of-All-Self-Hosting (MASH)](https://github.com/mother-of-all-self-hosting) team.
 
 ## Adjusting the playbook configuration
 
