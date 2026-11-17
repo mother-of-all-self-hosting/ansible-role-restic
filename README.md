@@ -21,7 +21,7 @@ Check [`defaults/main.yml`](defaults/main.yml) for the full list of supported op
 
 ### Collaborating on Radicle
 
-The role can be cloned from the [Radicle](https://radicle.dev) network, a peer-to-peer code collaboration stack built on Git. Please follow [this "Getting Started" guide](https://radicle.dev/guides/quick-start) on the official documentation for the basic installation and usage of the Radicle toolchain.
+This repository can be cloned from the [Radicle](https://radicle.dev) network, a peer-to-peer code collaboration stack built on Git. Please follow [this "Getting Started" guide](https://radicle.dev/guides/quick-start) on the official documentation for the basic installation and usage of the Radicle toolchain. You might also want to take a look at [Radicle Desktop](https://radicle.network/desktop) for simple collaboration.
 
 You can clone the repository by running the command below:
 
