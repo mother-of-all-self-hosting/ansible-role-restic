@@ -13,4 +13,3 @@
   with_items:
     - restic_uid
     - restic_gid
-    - restic_container_network
